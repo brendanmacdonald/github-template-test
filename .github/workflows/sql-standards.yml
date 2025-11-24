@@ -20,7 +20,7 @@ jobs:
         run: |
           # 1. Install SQLFluff
           pip install sqlfluff==3.0
-          
+          pip install sqlfluff-templater-dbt
           # 2. Lint only the changed files.
           sqlfluff lint ${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
 
