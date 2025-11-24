@@ -14,14 +14,15 @@ jobs:
         with:
             files: models/**/*.sql
 
-      - name: Install SQLFluff
-        # Skip if there are no matching files in changed-files.
+      - name: Install SQLFluff & lint files
+        # Only run this step if the 'changed-files' action found files
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: "pip install sqlfluff==3.0"
-  
-      - name: Lint models
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: sqlfluff lint ${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
+        run: |
+          # 1. Install SQLFluff
+          pip install sqlfluff==3.0
+          
+          # 2. Lint only the changed files.
+          sqlfluff lint ${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
 
 
 #py -m sqlfluff lint models
