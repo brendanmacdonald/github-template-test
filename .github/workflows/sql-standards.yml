@@ -21,7 +21,7 @@ jobs:
   
       - name: Lint models
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: sqlfluff lint $${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
+        run: sqlfluff lint ${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
 
 
 #py -m sqlfluff lint models
