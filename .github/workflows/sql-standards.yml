@@ -2,11 +2,6 @@ name: SQL Linting
 
 on: [pull_request]
 
-# THIS IS WHERE THE 'permissions' BLOCK GOES
-# permissions:
-#   contents: read
-#   checks: write # Crucial for posting the sqlfluff annotations to the PR
-
 jobs:
   lint-models:
     runs-on: ubuntu-latest
@@ -20,9 +15,13 @@ jobs:
             files: models/**/*.sql
 
       - name: Install SQLFluff
+        # Skip if there are no matching files in changed-files.
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: "pip install sqlfluff==3.0"
+  
       - name: Lint models
-        run: "sqlfluff lint --format github-annotation-native models"
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sqlfluff lint $${{ steps.changed-files.outputs.all_changed_files }} --format github-annotation-native
 
 
 #py -m sqlfluff lint models
